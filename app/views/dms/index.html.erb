@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="row">
+    <div class="col-4">
+      <li class="new-dm">
+        <%= link_to("New DM", "/dms/#{params[:user_id]}/choice") %>
+      </li>
+    </div>
+    <div class="col-8">
+      <h1 class="users-heading">DM一覧</h1>
+      <% (1..User.last.id).each do |i| %>
+
+        <% dm = Dm
+                .where("user_id = ? and to_user_id = ?", @current_user.id, i)
+                .or(Dm.where("to_user_id = ? and user_id = ?", @current_user.id, i))
+                .order(created_at: :desc)
+                .first %>
+
+        <% if dm %>
+          <div class="posts-index-item">
+            <div class="post-left">
+              <img src="<%= "/user_images/#{User.find_by(id: i).image_name}" %>">
+            </div>
+            <div class="post-right">
+              <div class="post-user-name">
+                <%= link_to("with #{User.find_by(id: i).name}", "/dms/#{@current_user.id}/show/#{i}") %>
+              </div>
+              <%= link_to(dm.content, "/dms/#{@current_user.id}/show/#{i}") %>
+              <div class="post-time">
+                <%= dm.created_at %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+      <% end %>
+    </div>
+
+  </div>
+</div>

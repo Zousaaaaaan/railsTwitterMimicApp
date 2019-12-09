@@ -1,0 +1,41 @@
+<div class="main posts-index">
+  <div class="container">
+    <h1 class="users-heading">DM with</h1>
+    <li class="user-heading">
+      <%= User.find_by(id: params[:to_user_id]).name %>
+    </li>
+    <% @dms.each do |dm| %>
+
+        <div class="posts-index-item">
+          <div class="post-left">
+            <img src="<%= "/user_images/#{User.find_by(id: dm.user_id).image_name}" %>">
+          </div>
+          <div class="post-right">
+            <div class="post-user-name">
+              <%= link_to("#{User.find_by(id: dm.user_id).name}", "/users/#{dm.user_id}") %>
+            </div>
+            <p>
+              <%= dm.content %>
+            </p>
+            <div class="post-time">
+              <%= dm.created_at %>
+            </div>
+          </div>
+        </div>
+
+    <% end %>
+
+  </div>
+</div>
+
+
+<footer>
+  <%= form_tag("/dms/#{params[:to_user_id]}/create") do %>
+    <% @dm.errors.full_messages.each do |message| %>
+      <div class="form-error">
+        <%= message %>
+      </div>
+    <% end %>
+    <h4><textarea name="content" rows="3" cols="30"></textarea> <input type="submit" value="DM投稿"></h4>
+  <% end %>
+</footer>

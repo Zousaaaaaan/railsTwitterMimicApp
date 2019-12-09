@@ -1,0 +1,22 @@
+<div class="main user-show">
+  <div class="container">
+
+    <h1 class="users-heading">フォローユーザー</h1>
+
+    <% @follows.each do |follow| %>
+      <% user = User.find_by(id: follow.target_user_id) %>
+      <div class="posts-index-item">
+        <div class="post-left">
+          <img src="<%= "/user_images/#{user.image_name}" %>">
+        </div>
+        <div class="post-right">
+          <div class="post-user-name">
+            <%= link_to(user.name, "/dms/#{@current_user.id}/show/#{user.id}") %>
+          </div>
+        </div>
+      </div>
+
+    <% end %>
+
+  </div>
+</div>

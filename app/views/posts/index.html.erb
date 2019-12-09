@@ -1,0 +1,46 @@
+<div class="main posts-index">
+  <div class="container">
+    <h1 class="users-heading">tweet一覧</h1>
+    <% @posts.each do |post| %>
+      <div class="posts-index-item">
+        <div class="post-left">
+          <img src="<%= "/user_images/#{post.user.image_name}" %>">
+        </div>
+        <div class="post-right">
+          <div class="post-user-name">
+            <%= link_to(post.user.name, "/users/#{post.user.id}") %>
+          </div>
+          <%= link_to(post.content, "/posts/#{post.id}") %>
+
+          <div class="post-time">
+            <%= post.created_at %>
+          </div>
+          <div class="parameter">
+            <% if Like.find_by(user_id: @current_user.id, post_id: post.id) %>
+              <%= link_to("/likes/#{post.id}/destroy", {method: "post"}) do %>
+                <span class="fa fa-heart like-btn-unlike"></span>
+              <% end %>
+            <% else %>
+              <%= link_to("/likes/#{post.id}/create", {method: "post"}) do %>
+                <span class="fa fa-heart like-btn"></span>
+              <% end %>
+            <% end %>
+            <% likes_count = Like.where(post_id: post.id).count %>
+            <%= likes_count %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<footer>
+  <%= form_tag("/posts/create") do %>
+    <% @post.errors.full_messages.each do |message| %>
+      <div class="form-error">
+        <%= message %>
+      </div>
+    <% end %>
+    <h4><textarea name="content" rows="3" cols="30"></textarea> <input type="submit" value="tweetする"></h4>
+  <% end %>
+</footer>

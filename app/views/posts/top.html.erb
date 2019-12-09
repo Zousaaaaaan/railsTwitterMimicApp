@@ -1,0 +1,49 @@
+<div class="main posts-index">
+  <div class="container">
+
+    <h1 class="users-heading">タイムライン</h1>
+    <h1 class="users-heading">(User&Follow)</h1>
+    <% @follow_posts_orderd.each do |fpost| %>
+      <div class="posts-index-item">
+        <div class="post-left">
+          <img src="<%= "/user_images/#{fpost.user.image_name}" %>">
+        </div>
+        <div class="post-right">
+          <div class="post-user-name">
+            <%= link_to(fpost.user.name, "/users/#{fpost.user.id}") %>
+          </div>
+          <%= link_to(fpost.content, "/posts/#{fpost.id}") %>
+
+          <div class="post-time">
+            <%= fpost.created_at %>
+          </div>
+          <div class="parameter">
+            <% if Like.find_by(user_id: @current_user.id, post_id: fpost.id) %>
+              <%= link_to("/likes/#{fpost.id}/destroy", {method: "post"}) do %>
+                <span class="fa fa-heart like-btn-unlike"></span>
+              <% end %>
+            <% else %>
+              <%= link_to("/likes/#{fpost.id}/create", {method: "post"}) do %>
+                <span class="fa fa-heart like-btn"></span>
+              <% end %>
+            <% end %>
+            <% likes_count = Like.where(post_id: fpost.id).count %>
+            <%= likes_count %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+  </div>
+</div>
+
+<footer>
+  <%= form_tag("/posts/create") do %>
+    <% @post.errors.full_messages.each do |message| %>
+      <div class="form-error">
+        <%= message %>
+      </div>
+    <% end %>
+    <h4><textarea name="content" rows="3" cols="30"></textarea> <input type="submit" value="tweetする"></h4>
+  <% end %>
+</footer>
